@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffer Yükleme Portalı</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom scrollbar to make the table look cleaner */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="flex items-center space-x-3 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <div class="bg-red-50 p-2.5 rounded-lg border border-red-100">
+                <i data-lucide="package" class="text-red-600 w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Buffer Yükleme Portalı</h1>
+                <p class="text-gray-500 text-sm mt-0.5">Bulk Upload için SalesBufferImport.csv dosyası oluşturun</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            
+            <!-- Form Section -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-gray-200 sticky top-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-100 pb-3 flex items-center">
+                    <i data-lucide="plus-circle" class="w-5 h-5 mr-2 text-gray-400"></i>
+                    Yeni Kayıt Ekle
+                </h2>
+                
+                <form id="item-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Malzeme Kodu (SKU) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="sku" placeholder="Örn: YMK-12345" autocomplete="off"
+                            class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all shadow-sm placeholder:text-gray-400 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Adet (Sales Buffer) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" id="sales_buffer" placeholder="Örn: 50" min="1"
+                            class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all shadow-sm placeholder:text-gray-400 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Depo Adı</label>
+                        <select id="warehouse_name" 
+                            class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all shadow-sm text-sm text-gray-600 appearance-none cursor-pointer">
+                            <option value="Yemeksepeti Market, Balçova (İzmir)">Yemeksepeti Market, Balçova (İzmir)</option>
+                            <option value="Yemeksepeti Market, Buca (İzmir)">Yemeksepeti Market, Buca (İzmir)</option>
+                            <option value="Yemeksepeti Market, Çiğli (İzmir)">Yemeksepeti Market, Çiğli (İzmir)</option>
+                            <option value="Yemeksepeti Market, Menteşe (Muğla)">Yemeksepeti Market, Menteşe (Muğla)</option>
+                            <option value="Yemeksepeti Market, Kuşadası (Aydın)">Yemeksepeti Market, Kuşadası (Aydın)</option>
+                            <option value="Yemeksepeti Market, Alsancak (İzmir)">Yemeksepeti Market, Alsancak (İzmir)</option>
+                            <option value="Yemeksepeti Market, Bornova (İzmir)">Yemeksepeti Market, Bornova (İzmir)</option>
+                            <option value="Yemeksepeti Market, Ege Üniversitesi (İzmir)">Yemeksepeti Market, Ege Üniversitesi (İzmir)</option>
+                            <option value="Yemeksepeti Market, Gaziemir (İzmir)">Yemeksepeti Market, Gaziemir (İzmir)</option>
+                            <option value="Yemeksepeti Market, Gümbet (Muğla)">Yemeksepeti Market, Gümbet (Muğla)</option>
+                            <option value="Yemeksepeti Market, İmbatlı (İzmir)">Yemeksepeti Market, İmbatlı (İzmir)</option>
+                            <option value="Yemeksepeti Market, Pamukkale (Denizli)">Yemeksepeti Market, Pamukkale (Denizli)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Depo ID</label>
+                        <input type="text" id="warehouse_id" 
+                            class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all shadow-sm text-xs text-gray-500 font-mono">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Not (Opsiyonel)</label>
+                        <input type="text" id="note" placeholder="İsteğe bağlı not..."
+                            class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all shadow-sm placeholder:text-gray-400 text-sm">
+                    </div>
+
+                    <div id="error-msg" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-100 flex items-start">
+                        <i data-lucide="alert-circle" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i>
+                        <span id="error-text"></span>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-all shadow-sm hover:shadow active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mt-2">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        <span>Listeye Ekle</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- List and Download Section -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[500px]">
+                
+                <div class="flex items-center justify-between p-5 border-b border-gray-200 bg-gray-50/50 rounded-t-xl">
+                    <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                        Eklenecek Kayıtlar 
+                        <span id="badge-count" class="ml-2 bg-gray-200 text-gray-700 py-0.5 px-2.5 rounded-full text-xs font-bold">0</span>
+                    </h2>
+                    
+                    <button id="download-btn" disabled
+                        class="flex items-center space-x-2 py-2.5 px-4 rounded-lg transition-all font-medium bg-gray-100 text-gray-400 cursor-not-allowed border border-transparent">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span class="text-sm">CSV İndir</span>
+                    </button>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="flex-1 flex flex-col items-center justify-center p-8 text-center text-gray-400 space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-full border border-gray-100 mb-2">
+                        <i data-lucide="file-spreadsheet" class="w-12 h-12 text-gray-300"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-600 mb-1">Liste şu an boş</p>
+                        <p class="text-sm text-gray-400 max-w-sm">Soldaki formu kullanarak buffer eklemek istediğiniz malzemeleri listeye dahil edebilirsiniz.</p>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div id="table-container" class="hidden flex-1 overflow-x-auto custom-scrollbar p-0">
+                    <table class="min-w-full text-sm text-left">
+                        <thead class="bg-white border-b border-gray-200 text-gray-500 uppercase text-[11px] font-bold tracking-wider sticky top-0">
+                            <tr>
+                                <th class="px-5 py-4 w-32">Malzeme Kodu</th>
+                                <th class="px-5 py-4 w-24">Adet</th>
+                                <th class="px-5 py-4">Depo Adı</th>
+                                <th class="px-5 py-4">Depo ID</th>
+                                <th class="px-5 py-4">Not</th>
+                                <th class="px-5 py-4 text-right w-16"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-gray-100 bg-white">
+                            <!-- Rows will be added here via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // State & Constants
+        let items = [];
+        const defaultWarehouseName = 'Yemeksepeti Market, Balçova (İzmir)';
+        const defaultWarehouseId = '1e790182-6fd4-e911-80ce-0050569953b7';
+
+        // DOM Elements
+        const form = document.getElementById('item-form');
+        const tbody = document.getElementById('table-body');
+        const emptyState = document.getElementById('empty-state');
+        const tableContainer = document.getElementById('table-container');
+        const downloadBtn = document.getElementById('download-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const errorText = document.getElementById('error-text');
+        const badgeCount = document.getElementById('badge-count');
+
+        // Initial Setup
+        document.getElementById('warehouse_name').value = defaultWarehouseName;
+        document.getElementById('warehouse_id').value = defaultWarehouseId;
+
+        // Form Submit Handler
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            errorMsg.classList.add('hidden');
+            
+            const skuInput = document.getElementById('sku');
+            const sku = skuInput.value.trim();
+            const sales_buffer = document.getElementById('sales_buffer').value;
+            const warehouse_name = document.getElementById('warehouse_name').value.trim();
+            const warehouse_id = document.getElementById('warehouse_id').value.trim();
+            const note = document.getElementById('note').value.trim();
+
+            // Basic Validation
+            if (!sku) {
+                showError('Lütfen bir Malzeme Kodu (SKU) giriniz.');
+                skuInput.focus();
+                return;
+            }
+            if (!sales_buffer || isNaN(sales_buffer) || Number(sales_buffer) <= 0) {
+                showError('Lütfen geçerli bir Adet giriniz.');
+                document.getElementById('sales_buffer').focus();
+                return;
+            }
+
+            // Create Item Object
+            const newItem = {
+                id: Date.now().toString(),
+                sku, 
+                sales_buffer, 
+                warehouse_name, 
+                warehouse_id, 
+                note
+            };
+
+            items.push(newItem);
+            
+            // Clear inputs for next entry
+            skuInput.value = '';
+            document.getElementById('sales_buffer').value = '';
+            document.getElementById('note').value = '';
+            skuInput.focus(); // Keep focus on SKU for fast typing
+
+            renderTable();
+        });
+
+        // Error display
+        function showError(msg) {
+            errorText.textContent = msg;
+            errorMsg.classList.remove('hidden');
+        }
+
+        // Remove item from array and re-render
+        function removeItem(id) {
+            items = items.filter(item => item.id !== id);
+            renderTable();
+        }
+
+        // Render Table HTML
+        function renderTable() {
+            badgeCount.textContent = items.length;
+            
+            // Toggle view states based on items array
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                tableContainer.classList.add('hidden');
+                
+                // Disable download button styling
+                downloadBtn.classList.remove('bg-green-600', 'hover:bg-green-700', 'text-white', 'shadow-sm', 'border-green-700');
+                downloadBtn.classList.add('bg-gray-100', 'text-gray-400', 'cursor-not-allowed', 'border-transparent');
+                downloadBtn.disabled = true;
+                
+                tbody.innerHTML = '';
+                return;
+            }
+
+            // Show table, enable download button
+            emptyState.classList.add('hidden');
+            tableContainer.classList.remove('hidden');
+            
+            downloadBtn.classList.remove('bg-gray-100', 'text-gray-400', 'cursor-not-allowed', 'border-transparent');
+            downloadBtn.classList.add('bg-green-600', 'hover:bg-green-700', 'text-white', 'shadow-sm', 'border-green-700');
+            downloadBtn.disabled = false;
+
+            // Generate HTML for rows
+            tbody.innerHTML = items.map(item => `
+                <tr class="hover:bg-blue-50/50 transition-colors group">
+                    <td class="px-5 py-4 font-semibold text-gray-900 whitespace-nowrap">
+                        ${escapeHtml(item.sku)}
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="bg-blue-100 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md font-bold text-xs">
+                            ${escapeHtml(item.sales_buffer)}
+                        </span>
+                    </td>
+                    <td class="px-5 py-4 text-gray-600 text-sm truncate max-w-[200px]" title="${escapeHtml(item.warehouse_name)}">
+                        ${escapeHtml(item.warehouse_name)}
+                    </td>
+                    <td class="px-5 py-4 text-gray-500 text-xs font-mono truncate max-w-[120px]" title="${escapeHtml(item.warehouse_id)}">
+                        ${item.warehouse_id ? escapeHtml(item.warehouse_id) : '<span class="text-gray-300">-</span>'}
+                    </td>
+                    <td class="px-5 py-4 text-gray-500 text-sm truncate max-w-[150px]" title="${escapeHtml(item.note)}">
+                        ${item.note ? escapeHtml(item.note) : '<span class="text-gray-300">-</span>'}
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                        <button onclick="removeItem('${item.id}')" 
+                                class="text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors p-2 rounded-lg opacity-0 group-hover:opacity-100 focus:opacity-100" 
+                                title="Sil">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Apply Lucide icons to dynamically generated rows
+            lucide.createIcons();
+        }
+
+        // CSV Export Logic
+        downloadBtn.addEventListener('click', () => {
+            if (items.length === 0) return;
+
+            const headers = ['sku', 'sales_buffer', 'warehouse_name', 'warehouse_id', 'note'];
+            
+            // Format cell to avoid breaking CSV format
+            const escapeCSV = (value) => {
+                if (value === null || value === undefined) return '""';
+                const stringValue = String(value);
+                if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+                    return '"' + stringValue.replace(/"/g, '""') + '"';
+                }
+                return stringValue;
+            };
+
+            // Generate row data
+            const rows = items.map(item => [
+                escapeCSV(item.sku),
+                escapeCSV(item.sales_buffer),
+                escapeCSV(item.warehouse_name),
+                escapeCSV(item.warehouse_id),
+                escapeCSV(item.note)
+            ].join(','));
+
+            // Combine with UTF-8 BOM (\uFEFF) for Excel compatibility
+            const csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+            
+            // Create Blob and trigger download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'SalesBufferImport.csv');
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // XSS Prevention helper
+        function escapeHtml(unsafe) {
+            return (unsafe || "").toString()
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
